@@ -10,6 +10,7 @@ tsGen.generate({
   inputFileName: '../NorthwindServer/metadata.json',
   outputFolder: dir,
   camelCase: true,
+  baseClassName: 'BaseEntity',
   kebabCaseFileNames: true,
   codePrefix: 'Northwind'
 });

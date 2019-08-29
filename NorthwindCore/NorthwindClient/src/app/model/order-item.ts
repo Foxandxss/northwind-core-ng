@@ -1,5 +1,6 @@
 // tslint:disable:no-trailing-whitespace
 // tslint:disable:member-ordering
+import { BaseEntity } from './base-entity';
 import { Order } from './order';
 import { Product } from './product';
 
@@ -7,7 +8,7 @@ import { Product } from './product';
 
 /// </code-import>
 
-export class OrderItem  {
+export class OrderItem extends BaseEntity  {
 
   /// <code> Place custom code between <code> tags
   

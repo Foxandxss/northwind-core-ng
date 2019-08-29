@@ -3,13 +3,16 @@
 Here are some steps to follow to create a new Angular 8 application
 with a .NET Core + EntityFramework backend, using Breeze to handle the data management.
 
-We start with an empty directory, and create a new .NET Core solution
-and a Angular 8 client app.  Along the way we will:
+We start with an empty directory, and create an end-to-end application that
+queries and updates data.  Along the way we will:
 
 - Create a new database
+- Create a .NET Core solution
 - Create C# entity classes from the database using EF
-- Create metadata from the EF model
+- Create an API for interacting with the entity model
+- Create metadata from the entity model
 - Create TypeScript entity classes from the metadata
+- Create an Angular application using the CLI
 - Create an Angular component to read and update entities
 
 This is an opinionated approach -- the "productivity path" -- that 
@@ -388,11 +391,25 @@ Start by adding the npm packages.  In the `NorthwindClient` directory, run:
 
 ## Generate Entities
 
-When developing our app, it's helpful to have TypeScript classes to represent the entity data that comes from the server.  
+When developing our app, it's helpful to have TypeScript classes to represent the entity data that comes from the server.  The data is in the form of Breeze entities, so we will first create a base class to represent that.
 
-We'll need to generate metadata from our NorthwindServer project, then use that metadata to generate the TypeScript classes.
+#### Create the base class
+In the `NorthwindClient/src/app` directory, create a new directory, `model`.  
+
+Then, in `NorthwindClient/src/app/model`, create a new TypeScript file, `base-entity.ts`.  Populate the file with:
+```
+import { Entity, EntityAspect, EntityType } from 'breeze-client';
+
+export class BaseEntity implements Entity {
+  entityAspect: EntityAspect;
+  entityType: EntityType;
+}
+```
+When we generate the entities, we will tell the entity generator to use this base class.
 
 #### Generate metadata from server
+
+We'll need to generate metadata from our **NorthwindServer** project, then use that metadata to generate the TypeScript classes.
 
 Start by opening a command prompt in the `NorthwindCore\NorthwindServer` directory.  Then run:
 
@@ -418,6 +435,7 @@ tsGen.generate({
   inputFileName: '../NorthwindServer/metadata.json',
   outputFolder: dir,
   camelCase: true,
+  baseClassName: 'BaseEntity',
   kebabCaseFileNames: true,
   codePrefix: 'Northwind'
 });
@@ -480,11 +498,11 @@ export class AppModule {
 }
 ```
 That's a lot of adapters!  Let's look at what they do:
- - ModelLibraryBackingStoreAdapter stores data in entities in a way that is compatible with Angular
- - UriBuilderJsonAdapter encodes Breeze queries in JSON format in query URIs
- - AjaxHttpClientAdapter uses Angular's HttpClient for performing AJAX requests
- - DataServiceWebApiAdapter handles responses from WebAPI and similar backends
- - NamingConvention sets how Breeze converts entity property names between client and server
+ - `ModelLibraryBackingStoreAdapter` stores data in entities in a way that is compatible with Angular
+ - `UriBuilderJsonAdapter` encodes Breeze queries in JSON format in query URIs
+ - `AjaxHttpClientAdapter` uses Angular's HttpClient for performing AJAX requests
+ - `DataServiceWebApiAdapter` handles responses from WebAPI and similar backends
+ - `NamingConvention` sets how Breeze converts entity property names between client and server
 
 ## Create the environment settings
 
