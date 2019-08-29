@@ -1,10 +1,16 @@
 # Steps for creating .NET Core Angular App
 
 Here are some steps to follow to create a new Angular 8 application
-with a .NET Core + EF backend, using Breeze to handle the data management.
+with a .NET Core + EntityFramework backend, using Breeze to handle the data management.
 
 We start with an empty directory, and create a new .NET Core solution
-and a Angular 8 client app.
+and a Angular 8 client app.  Along the way we will:
+
+- Create a new database
+- Create C# entity classes from the database using EF
+- Create metadata from the EF model
+- Create TypeScript entity classes from the metadata
+- Create an Angular component to read and update entities
 
 This is an opinionated approach -- the "productivity path" -- that 
 [IdeaBlade](https://www.ideablade.com/) has found works well for many projects.  It includes generating entity classes for both server and client side.
